@@ -1,8 +1,2 @@
-<style>
-b { color: Blue }
-r { color: Red }
-o { color: Orange }
-g { color: Green }
-</style>
 # AÏOLI
-**An <r>A</r>synchronous <g>IO</g> <b>li</b>brary based on C++ coroutines**
+**An <span style="color:red;font-size: calc(1em + 3px)">A</span>synchronous <span style="color:green;font-size: calc(1em + 3px)">IO</span> <span style="color:blue;font-size: calc(1em + 3px)">LI</span>brary based on C++ coroutines**
