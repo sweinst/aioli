@@ -1,2 +1,2 @@
 # aioli
-**A**synchrnous **IO** C++ library based on coroutines
+**A**synchornous **IO** C++ library based on coroutines
