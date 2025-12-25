@@ -1,2 +1,8 @@
+<style>
+b { color: Blue }
+r { color: Red }
+o { color: Orange }
+g { color: Green }
+</style>
 # AÏOLI
-<h6> An <font color="red">A</font>synchronous <font color="red">IO</font> <font color="red">li</font>brary based on C++ coroutines</h6>
+**An <r>A</r>synchronous <g>IO</g> <b>li</b>brary based on C++ coroutines**
