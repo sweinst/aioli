@@ -1,0 +1,67 @@
+#pragma once
+/**
+ * Platform independent network includes and definitions
+ */
+
+
+#ifdef _WIN32
+#   include <windows.h>
+#else
+#   include <arpa/inet.h>
+#   include <errno.h>
+#   include <netdb.h>
+#   include <sys/socket.h>
+#   include <unistd.h>
+#   include <string.h>
+#endif
+#include <expected>
+#include <format>
+using namespace std::string_literals;
+
+#ifdef _WIN32
+    typedef int socklen_t;
+
+    /** Wrapper to get last network error message */
+    template<typename... Args>
+    inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
+        return std::format("{} Error: {}\n", std::vformat(msg, std::make_format_args(args...)), strerror(WSAGetLastError()));
+    }
+
+    /** Initialize network libraries */
+    inline std::expected<bool, std::string> initialize_net() noexcept {
+        WSADATA wsaData;
+        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+            return std::unexpected(get_net_error("WSAStartup failed"s) );
+        }
+        return true;
+    }
+
+    /** Cleanup network libraries */
+    inline bool cleanup_net() noexcept {
+        WSACleanup();
+        return true;
+    }
+#else
+    using SOCKET = int;
+
+    /** Wrapper to get last network error message */
+    template<typename... Args>
+    inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
+        return std::format("{} Error: {}\n", std::vformat(msg, std::make_format_args(args...)), strerror(errno));
+    }
+
+    /** Initialize network libraries */
+    inline  std::expected<bool, std::string> initialize_net() {
+        return true;
+    }
+
+    /** Cleanup network libraries */
+    inline bool cleanup_net() noexcept {
+        return true;
+    }
+
+    /** allow to use the same function name on all platforms */
+    inline int closesocket(int fd) noexcept {
+        return close(fd);
+    }
+#endif
