@@ -45,12 +45,20 @@ namespace aio {
         }
 
     protected:
-        EventPollerBase(chrono::milliseconds max_poll_duration = chrono::milliseconds(100))
-            : max_poll_duration_(max_poll_duration) {
+        EventPollerBase(chrono::milliseconds max_poll_duration = chrono::milliseconds(100)) noexcept
+        : max_poll_duration_{max_poll_duration}, max_poll_duration_ts_{get_timespec(max_poll_duration)} {
         }
 
         EventPollerBase(const EventPollerBase&) = delete;
         EventPollerBase& operator=(const EventPollerBase&) = delete;
+
+        /** Gets the maximum duration to block while polling for events */
+        const timespec get_event_poll_duration(time_point now) const noexcept {
+            if (timers_.empty()) {
+                return max_poll_duration_ts_;
+            }
+            return get_timespec(now, timers_.top().id_.deadline_);
+        }
 
         void process_timers() noexcept {
             time_point now = clock::now();
@@ -72,9 +80,34 @@ namespace aio {
             }
         }
 
+        const struct timespec get_timespec(time_point now, time_point deadline) const noexcept {
+            if (deadline <= now) {
+                return timespec {
+                    .tv_sec = 0,
+                    .tv_nsec = 0,
+                };
+            }
+            auto duration = (deadline - now);
+            if (duration > max_poll_duration_) {
+                duration = max_poll_duration_;
+            }
+            return get_timespec(chrono::duration_cast<chrono::milliseconds>(duration));
+        }
+
+        const struct timespec get_timespec(chrono::milliseconds duration) const noexcept {
+            auto d_sec = chrono::duration_cast<chrono::seconds>(duration);
+            auto d_nsec = chrono::duration_cast<chrono::nanoseconds>(duration - d_sec);
+            return timespec {
+                .tv_sec = static_cast<decltype(std::declval<timespec>().tv_sec)>(d_sec.count()),
+                .tv_nsec = static_cast<decltype(std::declval<timespec>().tv_nsec)>(d_nsec.count()),
+            };
+        }
+
     private:
-        // the maximum duration to block while polling for events
-        chrono::milliseconds max_poll_duration_;
+        // the maximum duration to block while polling for events in  timespec format
+        const chrono::milliseconds max_poll_duration_;
+        // the maximum duration to block while polling for events in  timespec format
+        const struct timespec max_poll_duration_ts_;
         // the timers are stored in a priority queue ordered by their deadlines
         std::priority_queue<Timer> timers_;
         // the next unique timer id to assign
