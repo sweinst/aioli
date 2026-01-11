@@ -21,6 +21,10 @@ namespace aio {
             poller_.stop();
         }
 
+        EventPoller& get_poller() noexcept {
+            return poller_;
+        }
+
     private:
         EventPoller poller_;
         bool running_;

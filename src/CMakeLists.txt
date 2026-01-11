@@ -1,7 +1,8 @@
 set(AIOLI_SRC 
     cpp/base.cpp
     cpp/base_net.cpp
-    cpp/event_poller_base.cpp
+    cpp/event_pollers/base.cpp
+    cpp/event_pollers/select.cpp
 )
 
 set(AIOLI_HDRS 
@@ -10,7 +11,9 @@ set(AIOLI_HDRS
     include/aioli/timer.h
     include/aioli/event_loop.h
     include/aioli/event_pollers/types.h
-    include/aioli/event_pollers/event_poller_base.h
+    include/aioli/event_pollers/base.h
+    include/aioli/event_pollers/base.h
+    include/aioli/event_pollers/select.h
 )
 
 add_library(${CMAKE_PROJECT_NAME} ${AIOLI_SRC} ${AIOLI_HDRS})
