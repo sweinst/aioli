@@ -24,7 +24,10 @@ using namespace std::string_literals;
     /** Wrapper to get last network error message */
     template<typename... Args>
     inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
-        return std::format("{} Error: {}\n", std::vformat(msg, std::make_format_args(args...)), strerror(WSAGetLastError()));
+        char buf[256];
+        strerror_s(buf, sizeof(buf), WSAGetLastError());
+        // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
+        return std::format("{} Error: {}\n", std::vformat(msg, std::make_format_args(args...)), buf);
     }
 
     /** Initialize network libraries */
@@ -42,11 +45,13 @@ using namespace std::string_literals;
         return true;
     }
 #else
+    /** allow to use the SOCKET type on all platforms */
     using SOCKET = int;
 
     /** Wrapper to get last network error message */
     template<typename... Args>
     inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
+        // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
         return std::format("{} Error: {}\n", std::vformat(msg, std::make_format_args(args...)), strerror(errno));
     }
 
@@ -61,7 +66,7 @@ using namespace std::string_literals;
     }
 
     /** allow to use the same function name on all platforms */
-    inline int closesocket(int fd) noexcept {
+    inline int closesocket(SOCKET fd) noexcept {
         return close(fd);
     }
 #endif
