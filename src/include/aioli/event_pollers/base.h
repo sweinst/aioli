@@ -18,7 +18,7 @@ namespace aio {
                 },
                 .handle_ = handle, 
             };
-            timers_.push(timer);
+            timers_.push(std::move(timer));
             return timer.id_;
         }
 
@@ -40,7 +40,7 @@ namespace aio {
                 .id_ = timer_id,
                 .handle_ = nullptr,
             };
-            timers_.push(timer);
+            timers_.push(std::move(timer));
             return true;
         }
 
@@ -60,6 +60,7 @@ namespace aio {
             return get_timespec(now, timers_.top().id_.deadline_);
         }
 
+        /** Processes all expired timers */
         void process_timers() noexcept {
             time_point now = clock::now();
             id_t prev_id = 0;
@@ -80,6 +81,7 @@ namespace aio {
             }
         }
 
+        /** Converts a time_point deadline to timespec format */
         const struct timespec get_timespec(time_point now, time_point deadline) const noexcept {
             if (deadline <= now) {
                 return timespec {
@@ -94,6 +96,7 @@ namespace aio {
             return get_timespec(chrono::duration_cast<chrono::milliseconds>(duration));
         }
 
+        /** Converts a duration in milliseconds to timespec format */
         const struct timespec get_timespec(chrono::milliseconds duration) const noexcept {
             auto d_sec = chrono::duration_cast<chrono::seconds>(duration);
             auto d_nsec = chrono::duration_cast<chrono::nanoseconds>(duration - d_sec);
