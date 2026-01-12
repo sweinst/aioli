@@ -1,6 +1,7 @@
 set(AIOLI_SRC 
     cpp/base.cpp
     cpp/base_net.cpp
+    cpp/net_address.cpp
     cpp/event_pollers/base.cpp
     cpp/event_pollers/select.cpp
 )
@@ -8,6 +9,7 @@ set(AIOLI_SRC
 set(AIOLI_HDRS 
     include/aioli/base.h
     include/aioli/base_net.h
+    include/aioli/net_address.h
     include/aioli/timer.h
     include/aioli/event_loop.h
     include/aioli/event_pollers/types.h

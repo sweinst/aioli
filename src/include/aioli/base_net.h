@@ -5,7 +5,9 @@
 
 
 #ifdef _WIN32
-#   include <windows.h>
+#   include <winsock2.h>
+#   include <ws2tcpip.h>
+#   include <io.h>
 #else
 #   include <arpa/inet.h>
 #   include <errno.h>
@@ -27,7 +29,7 @@ using namespace std::string_literals;
         char buf[256];
         strerror_s(buf, sizeof(buf), WSAGetLastError());
         // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
-        return std::format("{} Error: {}\n", std::vformat(msg, std::make_format_args(args...)), buf);
+        return std::format("{} Error: {}", std::vformat(msg, std::make_format_args(args...)), buf);
     }
 
     /** Initialize network libraries */
@@ -52,7 +54,7 @@ using namespace std::string_literals;
     template<typename... Args>
     inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
         // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
-        return std::format("{} Error: {}\n", std::vformat(msg, std::make_format_args(args...)), strerror(errno));
+        return std::format("{} Error: {}", std::vformat(msg, std::make_format_args(args...)), strerror(errno));
     }
 
     /** Initialize network libraries */
