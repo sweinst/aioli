@@ -12,7 +12,6 @@ set(AIOLI_HDRS
     include/aioli/event_loop.h
     include/aioli/event_pollers/types.h
     include/aioli/event_pollers/base.h
-    include/aioli/event_pollers/base.h
     include/aioli/event_pollers/select.h
 )
 
