@@ -1,4 +1,5 @@
 #include <aioli/net_address.h>
+#include <cstring>
 
 namespace aio {
     bool NetAddress::operator==(const NetAddress& other) const noexcept {
