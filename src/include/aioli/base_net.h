@@ -72,3 +72,5 @@ using namespace std::string_literals;
         return close(fd);
     }
 #endif
+
+constexpr SOCKET INVALID_SOCKET_FD = static_cast<SOCKET>(-1);
