@@ -10,7 +10,7 @@ namespace aio {
         virtual ~EventPollerBase() = default;
 
         /** Adds a timer that will expire at the specified deadline */
-        TimerId add_timer(time_point deadline, coro_handle handle) noexcept {
+        TimerId add_timer(time_point deadline, coro_hdl handle) noexcept {
             Timer timer {
                 .id_ = TimerId {
                     .id_ = next_timer_id_++,
@@ -23,7 +23,7 @@ namespace aio {
         }
 
         /** Adds a timer that will expire after the specified duration */
-        TimerId add_timer(chrono::milliseconds duration, coro_handle handle) noexcept {
+        TimerId add_timer(chrono::milliseconds duration, coro_hdl handle) noexcept {
             return add_timer(clock::now() + duration, handle);
         }
 

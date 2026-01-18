@@ -12,7 +12,7 @@ namespace aio {
     using id_t = uint64_t;
     constexpr id_t INVALID_ID = static_cast<id_t>(-1);
 
-    using coro_handle = std::coroutine_handle<>;
+    using coro_hdl = std::coroutine_handle<>;
 
     using clock = std::chrono::steady_clock;
     using time_point = clock::time_point;

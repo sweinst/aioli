@@ -49,7 +49,7 @@ using namespace std::string_literals;
 #else
     /** common definitions for all platforms */
     using SOCKET = int;
-    consteval SOCKET INVALID_SOCKET = -1;
+    constexpr SOCKET INVALID_SOCKET = -1;
 
     /** Wrapper to get last network error message */
     template<typename... Args>

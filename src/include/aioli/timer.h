@@ -24,7 +24,7 @@ namespace aio {
         /** unique timer id */
         TimerId id_;
         /** coroutine handle to resume */
-        coro_handle handle_;
+        coro_hdl handle_;
 
         std::strong_ordering operator<=>(const Timer& other) const noexcept {
             std::strong_ordering cmp_id = id_ <=> other.id_;
