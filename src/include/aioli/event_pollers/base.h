@@ -116,6 +116,6 @@ namespace aio {
         // the next unique timer id to assign
         id_t next_timer_id_ = 0;
         // the last fired timer id
-        id_t last_fired_timer = static_cast<id_t>(-1);
+        id_t last_fired_timer = INVALID_ID;
     };
 } // namespace aio

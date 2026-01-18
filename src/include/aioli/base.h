@@ -10,6 +10,7 @@ namespace aio {
     namespace chrono = std::chrono;
 
     using id_t = uint64_t;
+    constexpr id_t INVALID_ID = static_cast<id_t>(-1);
 
     using coro_handle = std::coroutine_handle<>;
 
