@@ -47,8 +47,9 @@ using namespace std::string_literals;
         return true;
     }
 #else
-    /** allow to use the SOCKET type on all platforms */
+    /** common definitions for all platforms */
     using SOCKET = int;
+    consteval SOCKET INVALID_SOCKET = -1;
 
     /** Wrapper to get last network error message */
     template<typename... Args>
@@ -73,4 +74,3 @@ using namespace std::string_literals;
     }
 #endif
 
-constexpr SOCKET INVALID_SOCKET_FD = static_cast<SOCKET>(-1);

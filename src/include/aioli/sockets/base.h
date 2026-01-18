@@ -10,6 +10,6 @@ namespace aioli {
     public:
         explicit SocketBase(SOCKET fd) noexcept : fd_(fd) {}
     private:
-        SOCKET fd_{ INVALID_SOCKET_FD };
+        SOCKET fd_{ INVALID_SOCKET };
     };
 }
