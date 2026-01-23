@@ -10,38 +10,13 @@ namespace aio {
         virtual ~EventPollerBase() = default;
 
         /** Adds a timer that will expire at the specified deadline */
-        TimerId add_timer(time_point deadline, coro_hdl handle) noexcept {
-            Timer timer{
-                .id_ = TimerId{.id_ = next_timer_id_++, .deadline_ = deadline},
-                .handle_ = handle,
-            };
-            timers_.push(std::move(timer));
-            return timer.id_;
-        }
+        TimerId add_timer(time_point deadline, coro_hdl handle) noexcept;
 
         /** Adds a timer that will expire after the specified duration */
-        TimerId add_timer(chrono::milliseconds duration, coro_hdl handle) noexcept {
-            return add_timer(clock::now() + duration, handle);
-        }
+        TimerId add_timer(chrono::milliseconds duration, coro_hdl handle) noexcept;
 
         /** Removes a timer by its unique id */
-        bool remove_timer(const TimerId& timer_id) noexcept {
-            // already fired?
-            if (timers_.empty() || timer_id.deadline_ < timers_.top().id_.deadline_ ||
-                timer_id.id_ <= last_fired_timer_) {
-                return false;
-            }
-
-            // we push a timer on the priority queue with no handle, it will be placed just before
-            // the timer we want to cancel so the sequence of (timer_id, no handle) (timer_id.
-            // handle) is considered as a timer cancellation
-            Timer timer{
-                .id_ = timer_id,
-                .handle_ = nullptr,
-            };
-            timers_.push(std::move(timer));
-            return true;
-        }
+        bool remove_timer(const TimerId& timer_id) noexcept;
 
        protected:
         EventPollerBase(chrono::milliseconds max_poll_duration = chrono::milliseconds(100)) noexcept
@@ -85,4 +60,18 @@ namespace aio {
         }
         return get_timespec(now, timers_.top().id_.deadline_);
     }
+
+    inline TimerId EventPollerBase::add_timer(time_point deadline, coro_hdl handle) noexcept {
+        Timer timer{
+            .id_ = TimerId{.id_ = next_timer_id_++, .deadline_ = deadline},
+            .handle_ = handle,
+        };
+        timers_.push(std::move(timer));
+        return timer.id_;
+    }
+
+    inline TimerId EventPollerBase::add_timer(chrono::milliseconds duration, coro_hdl handle) noexcept {
+        return add_timer(clock::now() + duration, handle);
+    }
+
 }  // namespace aio

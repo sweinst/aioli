@@ -3,7 +3,7 @@ BasedOnStyle: Chromium
 NamespaceIndentation: All
 AlignAfterOpenBracket: BlockIndent
 BreakConstructorInitializers: BeforeComma
-ColumnLimit: 100
+ColumnLimit: 130
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 UseTab: Never
 IndentWidth: 4
