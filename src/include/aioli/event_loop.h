@@ -1,7 +1,7 @@
 # pragma once
 
 #include "base.h"
-#include "event_pollers/types.h"
+#include "event_pollers/event_poller_types.h"
 
 namespace aio {
     /** Event loop class which is run periodically for polling events */

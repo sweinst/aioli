@@ -1,23 +1,24 @@
 set(AIOLI_SRC 
     cpp/base.cpp
     cpp/base_net.cpp
-    cpp/event_pollers/base.cpp
-    cpp/event_pollers/select.cpp
+    cpp/event_pollers/event_poller_base.cpp
+    cpp/event_pollers/event_poller_select.cpp
     cpp/net_address.cpp
-    cpp/sockets/base.cpp
+    cpp/sockets/socket_base.cpp
 )
 
 set(AIOLI_HDRS 
     include/aioli/base.h
     include/aioli/base_net.h
-    include/aioli/net_address.h
     include/aioli/event_loop.h
-    include/aioli/event_pollers/types.h
-    include/aioli/event_pollers/base.h
-    include/aioli/event_pollers/select.h
+    include/aioli/event_pollers/event_poller_types.h
+    include/aioli/event_pollers/event_poller_base.h
+    include/aioli/event_pollers/event_poller_select.h
+    include/aioli/events.h
+    include/aioli/net_address.h
     include/aioli/timer.h
-    include/aioli/sockets/base.h
-    include/aioli/sockets/types.h
+    include/aioli/sockets/socket_base.h
+    include/aioli/sockets/socket_types.h
 )
 
 add_library(${CMAKE_PROJECT_NAME} ${AIOLI_SRC} ${AIOLI_HDRS})

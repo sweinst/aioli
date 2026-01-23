@@ -1,6 +1,6 @@
 #pragma once
-#include "../sockets/base.h"
-#include "../sockets/types.h"
+#include "../sockets/socket_base.h"
+#include "../sockets/socket_types.h"
 
 namespace aioli {
     /** Common code for all sockets which is not socket type specific. 

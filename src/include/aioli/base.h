@@ -21,5 +21,6 @@ namespace aio {
 
 #include "base_net.h"
 #include "timer.h"
+#include "events.h"
 #include "event_loop.h"
 
