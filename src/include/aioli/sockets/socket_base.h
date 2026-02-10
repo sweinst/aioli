@@ -10,9 +10,12 @@ namespace aioli {
     protected:
         SocketBase() noexcept = default;
         SocketBase(EventPollerBase& event_poller, SOCKET fd) noexcept
-        : event_poller_(&event_poller), fd_(fd) {}
+        : event_poller_(&event_poller), fd_(setup(fd)) {}
         SocketBase(EventPollerBase& event_poller, int domain, int type)
         : event_poller_(&event_poller), fd_(create(domain, type)) {}
+
+        SocketBase(const SocketBase&) = delete;
+        SocketBase& operator=(const SocketBase&) = delete;
 
         /*! create the socket */
         SOCKET create(int domain, int type);
@@ -23,3 +26,4 @@ namespace aioli {
         SOCKET fd_{ INVALID_SOCKET };
     };
 }
+
