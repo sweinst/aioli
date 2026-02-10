@@ -2,7 +2,7 @@
 #include <variant>
 #include "base.h"
 
-namespace aio {
+namespace aioli {
     /**
      * Represents a network address (IPv4 or IPv6)
      */

@@ -1,7 +1,7 @@
 # pragma once
 #include "base.h"
 
-namespace aio {
+namespace aioli {
     /** I/O events */
     struct IOEvent {
         /** The event types defined as bits */

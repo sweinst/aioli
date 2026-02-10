@@ -1,6 +1,6 @@
 #pragma once
 
-namespace aio {
+namespace aioli {
     /** Concept for event poller types */
     template <class EventPoller>
     concept EventPoller_t = requires(EventPoller ep) {

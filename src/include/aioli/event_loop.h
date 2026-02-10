@@ -3,7 +3,7 @@
 #include "base.h"
 #include "event_pollers/event_poller_types.h"
 
-namespace aio {
+namespace aioli {
     /** Event loop class which is run periodically for polling events */
     template <EventPoller_t EventPoller>
     class event_loop {

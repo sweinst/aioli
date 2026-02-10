@@ -5,7 +5,7 @@
 #include <expected>
 #include <print>
 
-namespace aio {
+namespace aioli {
     using namespace std::chrono_literals;
     namespace chrono = std::chrono;
 

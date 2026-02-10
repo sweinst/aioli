@@ -1,7 +1,7 @@
 #include <aioli/net_address.h>
 #include <cstring>
 
-namespace aio {
+namespace aioli {
     bool NetAddress::operator==(const NetAddress& other) const noexcept {
         return std::memcmp(&address_, &other.address_, sizeof(address_)) == 0;
     }

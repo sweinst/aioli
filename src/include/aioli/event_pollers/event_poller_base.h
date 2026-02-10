@@ -3,7 +3,7 @@
 #include "../base.h"
 #include "event_poller_types.h"
 
-namespace aio {
+namespace aioli {
     /** Base class for event pollers */
     class EventPollerBase {
        public:

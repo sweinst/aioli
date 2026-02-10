@@ -1,6 +1,6 @@
 #include <aioli/event_pollers/event_poller_base.h>
 
-namespace aio {
+namespace aioli {
     void EventPollerBase::process_timers() {
         time_point now = clock::now();
         id_t prev_id = 0;

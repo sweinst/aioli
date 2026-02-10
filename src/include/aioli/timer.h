@@ -2,7 +2,7 @@
 
 #include "base.h"
 
-namespace aio {
+namespace aioli {
     /** Timer identifier structure  */
     struct TimerId {
         /** unique timer id */
