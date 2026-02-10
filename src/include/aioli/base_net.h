@@ -74,3 +74,10 @@ using namespace std::string_literals;
     }
 #endif
 
+class net_error  : public std::runtime_error { // base of all runtime-error exceptions
+public:
+    using base = std::runtime_error;
+
+    template<typename... Args>
+    explicit net_error(const std::string& message, Args... args) : base(get_net_error(message, args...)) {}
+};

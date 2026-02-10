@@ -35,7 +35,7 @@ namespace aioli {
             addr6.sin6_port = static_cast<decltype(addr6.sin6_port)>(port);
             address_ = addr6;
         } else {
-            throw std::invalid_argument(get_net_error("Invalid IP address format: "s, addr));
+            throw net_error("Invalid IP address format: "s, addr);
         }
     }
 
