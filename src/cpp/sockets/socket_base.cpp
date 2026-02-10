@@ -1,5 +1,9 @@
 #include <aioli/sockets/socket_base.h>
 
+#ifndef _WIN32
+    #include <fcntl.h>
+#endif
+
 namespace aioli {
     SOCKET SocketBase::create(int domain, int type) {
         auto s = socket(domain, type, 0);
