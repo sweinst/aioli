@@ -3,82 +3,90 @@
  * Platform independent network includes and definitions
  */
 
-
 #ifdef _WIN32
-#   include <winsock2.h>
-#   include <ws2tcpip.h>
-#   include <io.h>
+#include <io.h>
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #else
-#   include <arpa/inet.h>
-#   include <errno.h>
-#   include <netdb.h>
-#   include <sys/socket.h>
-#   include <unistd.h>
-#   include <string.h>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <netdb.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <unistd.h>
 #endif
 #include <expected>
 #include <format>
 using namespace std::string_literals;
 
 #ifdef _WIN32
-    typedef int socklen_t;
+typedef int socklen_t;
 
-    /** Wrapper to get last network error message */
-    template<typename... Args>
-    inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
-        char buf[256];
-        strerror_s(buf, sizeof(buf), WSAGetLastError());
-        // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
-        return std::format("{} Error: {}", std::vformat(msg, std::make_format_args(args...)), buf);
-    }
+/** Wrapper to get last network error message */
+template <typename... Args>
+inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
+    char buf[256];
+    strerror_s(buf, sizeof(buf), WSAGetLastError());
+    // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
+    return std::format("{} Error: {}", std::vformat(msg, std::make_format_args(args...)), buf);
+}
 
-    /** Initialize network libraries */
-    inline std::expected<bool, std::string> initialize_net() noexcept {
-        WSADATA wsaData;
-        if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-            return std::unexpected(get_net_error("WSAStartup failed"s) );
-        }
-        return true;
+/** Initialize network libraries */
+inline void initialize_net() {
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        throw std::runtime_error(get_net_error("WSAStartup failed"s));
     }
+}
 
-    /** Cleanup network libraries */
-    inline bool cleanup_net() noexcept {
-        WSACleanup();
-        return true;
-    }
+/** Cleanup network libraries */
+inline bool cleanup_net() noexcept {
+    WSACleanup();
+    return true;
+}
 #else
-    /** common definitions for all platforms */
-    using SOCKET = int;
-    constexpr SOCKET INVALID_SOCKET = -1;
+/** common definitions for all platforms */
+using SOCKET = int;
+constexpr SOCKET INVALID_SOCKET = -1;
 
-    /** Wrapper to get last network error message */
-    template<typename... Args>
-    inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
-        // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
-        return std::format("{} Error: {}", std::vformat(msg, std::make_format_args(args...)), strerror(errno));
-    }
+/** Wrapper to get last network error message */
+template <typename... Args>
+inline std::string get_net_error(const std::string& msg, Args... args) noexcept {
+    // NB: in C++26, std::runtime_format will simplify this by allowing to pass a dynamic format string
+    return std::format("{} Error: {}", std::vformat(msg, std::make_format_args(args...)), strerror(errno));
+}
 
-    /** Initialize network libraries */
-    inline  std::expected<bool, std::string> initialize_net() {
-        return true;
-    }
+/** Initialize network libraries */
+void initialize_net() {
+    return true;
+}
 
-    /** Cleanup network libraries */
-    inline bool cleanup_net() noexcept {
-        return true;
-    }
+/** Cleanup network libraries */
+inline bool cleanup_net() noexcept {
+    return true;
+}
 
-    /** allow to use the same function name on all platforms */
-    inline int closesocket(SOCKET fd) noexcept {
-        return close(fd);
-    }
+/** allow to use the same function name on all platforms */
+inline int closesocket(SOCKET fd) noexcept {
+    return close(fd);
+}
 #endif
 
-/** an exception which automatically appends the last network error message to the error message */
-class net_error  : public std::runtime_error {
-public:
-    using base = std::runtime_error;
+namespace aioli {
+    /** an exception which automatically appends the last network error message to the error message */
+    class net_error : public std::runtime_error {
+       public:
+        using base = std::runtime_error;
 
-    template<typename... Args>
-    explicit net_error(const std::string& message, Args... args) : base(get_net_error(message, args...)) {}
-};
+        template <typename... Args>
+        explicit net_error(const std::string& message, Args... args)
+            : base(get_net_error(message, args...)) {}
+    };
+
+    /** RAII class to initialize and cleanup network libraries */
+    class NetInitializer {
+       public:
+        NetInitializer() { initialize_net(); }
+        ~NetInitializer() { cleanup_net(); }
+    };
+}  // namespace aioli
