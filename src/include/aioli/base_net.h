@@ -74,7 +74,8 @@ using namespace std::string_literals;
     }
 #endif
 
-class net_error  : public std::runtime_error { // base of all runtime-error exceptions
+/** an exception which automatically appends the last network error message to the error message */
+class net_error  : public std::runtime_error {
 public:
     using base = std::runtime_error;
 
